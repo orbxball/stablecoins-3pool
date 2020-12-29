@@ -69,3 +69,14 @@ def dai_vault(Vault):
 def dai_whale(accounts):
     # binance7
     yield accounts.at('0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8', force=True)
+
+
+@pytest.fixture
+def usdc(interface):
+    yield interface.ERC20('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+
+
+@pytest.fixture
+def usdc_whale(accounts):
+    # binance8
+    yield accounts.at('0xF977814e90dA44bFA03b6295A0616a897441aceC', force=True)
