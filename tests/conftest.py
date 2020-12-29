@@ -80,3 +80,14 @@ def usdc(interface):
 def usdc_whale(accounts):
     # binance8
     yield accounts.at('0xF977814e90dA44bFA03b6295A0616a897441aceC', force=True)
+
+
+@pytest.fixture
+def usdt(interface):
+    yield interface.USDT('0xdAC17F958D2ee523a2206206994597C13D831ec7')
+
+
+@pytest.fixture
+def usdt_whale(accounts):
+    # binance8
+    yield accounts.at('0xF977814e90dA44bFA03b6295A0616a897441aceC', force=True)
