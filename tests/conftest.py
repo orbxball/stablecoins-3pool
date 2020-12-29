@@ -8,14 +8,9 @@ def andre(accounts):
 
 
 @pytest.fixture
-def token(andre, Token):
-    yield andre.deploy(Token)
-
-
-@pytest.fixture
 def gov(accounts):
     # yearn multis... I mean YFI governance. I swear!
-    yield accounts[1]
+    yield accounts.at('0xFEB4acf3df3cDEA7399794D0869ef76A6EfAff52', force=True)
 
 
 @pytest.fixture
@@ -45,7 +40,7 @@ def strategist(accounts):
 @pytest.fixture
 def keeper(accounts):
     # This is our trusty bot!
-    yield accounts[4]
+    yield accounts.at('0x13dAda6157Fee283723c0254F43FF1FdADe4EEd6', force=True)
 
 
 @pytest.fixture
@@ -56,62 +51,21 @@ def strategy(strategist, keeper, vault, Strategy):
 
 
 @pytest.fixture
-def nocoiner(accounts):
-    # Has no tokens (DeFi is a ponzi scheme!)
-    yield accounts[5]
+def Vault(pm):
+    yield pm(config["dependencies"][0]).Vault
 
 
 @pytest.fixture
-def pleb(accounts, andre, token, vault):
-    # Small fish in a big pond
-    a = accounts[6]
-    # Has 0.01% of tokens (heard about this new DeFi thing!)
-    bal = token.totalSupply() // 10000
-    token.transfer(a, bal, {"from": andre})
-    # Unlimited Approvals
-    token.approve(vault, 2 ** 256 - 1, {"from": a})
-    # Deposit half their stack
-    vault.deposit(bal // 2, {"from": a})
-    yield a
+def dai(interface):
+    yield interface.ERC20('0x6B175474E89094C44Da98b954EedeAC495271d0F')
 
 
 @pytest.fixture
-def chad(accounts, andre, token, vault):
-    # Just here to have fun!
-    a = accounts[7]
-    # Has 0.1% of tokens (somehow makes money trying every new thing)
-    bal = token.totalSupply() // 1000
-    token.transfer(a, bal, {"from": andre})
-    # Unlimited Approvals
-    token.approve(vault, 2 ** 256 - 1, {"from": a})
-    # Deposit half their stack
-    vault.deposit(bal // 2, {"from": a})
-    yield a
+def dai_vault(Vault):
+    yield Vault.at('0xBFa4D8AA6d8a379aBFe7793399D3DdaCC5bBECBB')
 
 
 @pytest.fixture
-def greyhat(accounts, andre, token, vault):
-    # Chaotic evil, will eat you alive
-    a = accounts[8]
-    # Has 1% of tokens (earned them the *hard way*)
-    bal = token.totalSupply() // 100
-    token.transfer(a, bal, {"from": andre})
-    # Unlimited Approvals
-    token.approve(vault, 2 ** 256 - 1, {"from": a})
-    # Deposit half their stack
-    vault.deposit(bal // 2, {"from": a})
-    yield a
-
-
-@pytest.fixture
-def whale(accounts, andre, token, vault):
-    # Totally in it for the tech
-    a = accounts[9]
-    # Has 10% of tokens (was in the ICO)
-    bal = token.totalSupply() // 10
-    token.transfer(a, bal, {"from": andre})
-    # Unlimited Approvals
-    token.approve(vault, 2 ** 256 - 1, {"from": a})
-    # Deposit half their stack
-    vault.deposit(bal // 2, {"from": a})
-    yield a
+def dai_whale(accounts):
+    # binance7
+    yield accounts.at('0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8', force=True)
