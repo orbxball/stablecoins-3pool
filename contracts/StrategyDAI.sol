@@ -160,6 +160,8 @@ contract StrategyDAI3pool is BaseStrategy {
     function _withdrawSome(uint256 _amount) internal returns (uint256) {
         uint256 _amnt = _amount.mul(1e18).div(ICurveFi(_3pool).get_virtual_price());
         uint256 _amt = _amnt.mul(1e18).div(yvERC20(y3crv).getPricePerFullShare());
+        uint256 _bal = IERC20(y3crv).balanceOf(address(this));
+        if (_amt > _bal) _amt = _bal;
         uint256 _before = IERC20(_3crv).balanceOf(address(this));
         yvERC20(y3crv).withdraw(_amt);
         uint256 _after = IERC20(_3crv).balanceOf(address(this));
