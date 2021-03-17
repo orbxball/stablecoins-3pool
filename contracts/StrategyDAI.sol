@@ -205,15 +205,19 @@ contract StrategyDAI3pool is BaseStrategy {
     }
 
     function forceD(uint256 _amount) external onlyAuthorized {
+        uint256 _bal = want.balanceOf(address(this));
+        if (_amount > _bal) _amount = _bal;
         ICurveFi(_3pool).add_liquidity([_amount, 0, 0], 0);
         if (_amount < tank) tank = tank.sub(_amount);
         else tank = 0;
 
-        uint256 _bal = IERC20(_3crv).balanceOf(address(this));
+        _bal = IERC20(_3crv).balanceOf(address(this));
         yvERC20(y3crv).deposit(_bal);
     }
 
     function forceW(uint256 _amt) external onlyAuthorized {
+        uint256 _bal = IERC20(y3crv).balanceOf(address(this));
+        if (_amt > _bal) _amt = _bal;
         uint256 _before = IERC20(_3crv).balanceOf(address(this));
         yvERC20(y3crv).withdraw(_amt);
         uint256 _after = IERC20(_3crv).balanceOf(address(this));
