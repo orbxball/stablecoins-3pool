@@ -205,8 +205,7 @@ contract StrategyDAI3pool is BaseStrategy {
     }
 
     function forceD(uint256 _amount) external onlyAuthorized {
-        uint256 v = _amount.mul(1e18).div(ICurveFi(_3pool).get_virtual_price());
-        ICurveFi(_3pool).add_liquidity([_amount, 0, 0], v.mul(DENOMINATOR.sub(slip)).div(DENOMINATOR));
+        ICurveFi(_3pool).add_liquidity([_amount, 0, 0], 0);
         if (_amount < tank) tank = tank.sub(_amount);
         else tank = 0;
 
@@ -221,7 +220,7 @@ contract StrategyDAI3pool is BaseStrategy {
         _amt = _after.sub(_before);
         
         _before = want.balanceOf(address(this));
-        ICurveFi(_3pool).remove_liquidity_one_coin(_amt, 0, _amt.mul(DENOMINATOR.sub(slip)).div(DENOMINATOR));
+        ICurveFi(_3pool).remove_liquidity_one_coin(_amt, 0, 0);
         _after = want.balanceOf(address(this));
         tank = tank.add(_after.sub(_before));
     }
